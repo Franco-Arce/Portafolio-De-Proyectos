@@ -117,25 +117,27 @@ body::before {
 
 /* Hero Section */
 .hero {
-    min-height: 80vh;
+    min-height: 60vh;
+    /* Reduced from 80vh */
     display: flex;
     align-items: center;
     position: relative;
-    padding: 6rem 0;
+    padding: 4rem 0;
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 900px;
+    /* Increased width for better flow */
 }
 
 .hero-badge {
     display: inline-block;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.9rem;
     background: rgba(139, 92, 246, 0.1);
     border: 1px solid rgba(139, 92, 246, 0.2);
     border-radius: 50px;
     color: var(--primary);
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
     letter-spacing: 0.05em;
@@ -144,27 +146,48 @@ body::before {
 
 .hero-title {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 4.5rem;
-    line-height: 1.1;
+    font-size: 3.5rem;
+    /* Reduced from 4.5rem */
+    line-height: 1.2;
     font-weight: 800;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(to right, #fff, #a78bfa);
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.gradient-text {
+    background: linear-gradient(-45deg, #a78bfa, #d946ef, #8b5cf6, #fff);
+    background-size: 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: gradient-anim 5s ease infinite;
+}
+
+@keyframes gradient-anim {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     color: var(--text-muted);
-    margin-bottom: 3rem;
-    max-width: 600px;
+    margin-bottom: 2.5rem;
+    max-width: 700px;
 }
 
 .hero-stats {
     display: flex;
-    gap: 4rem;
+    gap: 3rem;
     border-top: 1px solid var(--glass-border);
-    padding-top: 2rem;
+    padding-top: 1.5rem;
 }
 
 .stat-number {
