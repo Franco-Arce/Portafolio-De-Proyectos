@@ -1,39 +1,60 @@
-// Filter functionality
 document.addEventListener('DOMContentLoaded', function () {
+    // 1. Mouse Move Effect for Cards (Glow)
+    const cards = document.querySelectorAll('.project-card');
+
+    document.getElementById('projects').onmousemove = e => {
+        for (const card of cards) {
+            const rect = card.getBoundingClientRect(),
+                x = e.clientX - rect.left,
+                y = e.clientY - rect.top;
+
+            card.style.setProperty("--mouse-x", `${x}px`);
+            card.style.setProperty("--mouse-y", `${y}px`);
+        };
+    }
+
+    // 2. Filter Functionality
     const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
 
     filterButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const filter = this.getAttribute('data-filter');
-
-            // Update active button
+            // Remove active class from all
             filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked
             this.classList.add('active');
 
-            // Filter projects
-            projectCards.forEach(card => {
-                if (filter === 'all') {
-                    card.classList.remove('hidden');
-                    card.style.animation = 'fadeIn 0.5s ease-out';
+            const filter = this.getAttribute('data-filter');
+
+            cards.forEach(card => {
+                const category = card.getAttribute('data-category');
+
+                if (filter === 'all' || category.includes(filter)) {
+                    card.style.display = 'flex';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 50);
                 } else {
-                    const categories = card.getAttribute('data-category');
-                    if (categories && categories.includes(filter)) {
-                        card.classList.remove('hidden');
-                        card.style.animation = 'fadeIn 0.5s ease-out';
-                    } else {
-                        card.classList.add('hidden');
-                    }
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
                 }
             });
         });
     });
 
-    // Smooth scroll for navigation links
+    // 3. Smooth Scroll for Nav Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
+
+            // Update active nav state
+            document.querySelectorAll('.nav a').forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+
             if (target) {
                 target.scrollIntoView({
                     behavior: 'smooth',
@@ -43,55 +64,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Add scroll effect to header
-    const header = document.querySelector('.header');
-    let lastScroll = 0;
+    // 4. Parallax Hero Effect
+    document.addEventListener('mousemove', (e) => {
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
 
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
+        const heroTitle = document.querySelector('.hero-title');
+        const heroBadge = document.querySelector('.hero-badge');
 
-        if (currentScroll > 100) {
-            header.style.boxShadow = '0 10px 15px -3px rgb(0 0 0 / 0.1)';
-        } else {
-            header.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)';
+        if (heroTitle) {
+            heroTitle.style.transform = `translate(${mouseX * -20}px, ${mouseY * -20}px)`;
         }
-
-        lastScroll = currentScroll;
+        if (heroBadge) {
+            heroBadge.style.transform = `translate(${mouseX * 10}px, ${mouseY * 10}px)`;
+        }
     });
 
-    // Add intersection observer for fade-in animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-
-    // Observe all project cards
-    projectCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-        observer.observe(card);
-    });
-
-    // Count projects by category
-    console.log('Portfolio loaded successfully!');
-    console.log('Total projects:', projectCards.length);
-
-    const categories = {};
-    projectCards.forEach(card => {
-        const cats = card.getAttribute('data-category').split(' ');
-        cats.forEach(cat => {
-            categories[cat] = (categories[cat] || 0) + 1;
-        });
-    });
-    console.log('Projects by category:', categories);
+    console.log('✨ Premium Portfolio Loaded - Dark Violet Theme');
 });
